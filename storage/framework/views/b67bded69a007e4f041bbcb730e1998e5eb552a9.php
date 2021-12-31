@@ -1,0 +1,90 @@
+<?php echo e(col("col-md-12 noprint","Yeni Stok Çıkışı",3)); ?>
+
+    
+    <?php 
+    if($user->level=="Admin") {
+        if(getisset("sil")) {
+
+            db("stok_cikislari")->where("id",get("sil"))
+            ->delete();
+           // echo "ok";
+           // exit();
+           db("stoklar")->where("id",get("stok_id"))
+           ->update(['cikis'=>null]);
+           bilgi("Kayıt başarıyla silinmiştir");
+        }
+    }
+    
+    if(getisset("ekle")) {
+        //print2($_POST);
+        $stokobj = db("stoklar")->where("id",post("stok"))->first();
+        $musteri = json_encode_tr($musteriler[post("firma")]);
+        $stok = json_encode_tr($stokobj);
+        $siparis = json_encode_tr(db("siparisler")->where("id",post("siparis"))->first());
+        $dizi = [
+            "siparis" =>$siparis,
+            "stok" =>$stok,
+            "musteri" =>$musteri,
+            "qty" =>$stokobj->net,
+            "siparis_id"=>post("siparis"),
+            "stok_id" => post("stok"),
+            "musteri_id" => post("firma")
+        ];
+        $varmi = db("stok_cikislari")
+            ->where("siparis_id",post("siparis"))
+            ->where("stok_id",post("stok"))
+            ->where("musteri_id",post("firma"))
+            ->get();
+        if($varmi->count()==0) {
+            ekle($dizi,"stok_cikislari");
+            db("stoklar")->where("id",post("stok"))
+            ->update(['cikis'=>1]);
+            bilgi("Stok çıkışı başarılı bir şekilde yapılmıştır");
+        } else {
+            bilgi("Bu stok çıkışı daha önce yapılmıştır");
+        }
+        
+    } ?>
+   
+        <form action="?ekle" method="post" class="">
+            <div class="row">
+                <div class="col-md-9">
+                    <?php echo e(csrf_field()); ?>
+
+                    <?php echo e(e2("FİRMA:")); ?>
+
+                    <select name="firma" id="" class="form-control select2 firma-sec" required>
+                            <option value=""><?php echo e(e2("MÜŞTERİ SEÇİNİZ")); ?></option>
+                        <?php foreach($musteriler AS $m) {
+                            ?>
+                            <option value="<?php echo e($m->id); ?>"><?php echo e($m->title); ?></option>
+                            <?php 
+                        } ?>
+                        
+                    </select>
+                    <div class="detay"></div>
+
+                    <button class="btn btn-primary mt-10" type="submit"><?php echo e(e2("Ekle")); ?></button>
+
+                </div>
+                <div class="col-md-3">
+                    <div class="float-right">
+                        <div class="info"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <script>
+                $(function(){
+                    $(".firma-sec").on("change",function(){
+                        $(".detay").html("Yükleniyor...");
+                        $.get("?ajax=siparisler",{
+                            id : $(this).val()
+                        },function(d){
+                            $(".detay").html(d);
+                        });
+                    });
+                }); 
+            </script>
+        </form>
+    <?php echo e(_col()); ?><?php /**PATH /home/pgutrunc/bta.truncgil.com/resources/views/admin/type/stok-cikislari/yeni-stok-cikisi.blade.php ENDPATH**/ ?>
