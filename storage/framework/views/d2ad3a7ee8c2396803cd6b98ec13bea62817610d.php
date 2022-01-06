@@ -15,10 +15,16 @@ $sorgu = $sorgu->get();
         </tr>
         <?php 
         $toplam = 0;
+        $adet = 0;
+        $gramaj = 0;
+        $metre = 0;
         foreach($sorgu AS $s) { 
             $toplam +=$s->qty;
             $stok = j($s->stok);
             $stok_json = j($stok['json']);
+            if(isset($stok_json['METRE'])) $metre += $stok_json['METRE'];
+            if(isset($stok_json['GRAMAJ'])) $gramaj += $stok_json['GRAMAJ'];
+            if(isset($stok_json['ADET'])) $adet += $stok_json['ADET'];
         ?>
         <tr>
             <td><?php echo e($stok['slug']); ?></td>
@@ -29,8 +35,13 @@ $sorgu = $sorgu->get();
         <?php } ?>
         <tfoot>
         <tr class="table-warning">
-        <th  colspan="2" class="text-right"><?php echo e(e2("TOPLAM")); ?> :</th>
-        <th><?php echo e(nf($toplam)); ?></th>
+        <th  colspan="3" class="text-right"><?php echo e(e2("TOPLAM")); ?> :</th>
+        <th>
+            <?php echo e(nf($toplam)); ?> <br>
+        <?php if($metre!=0)  echo nf($metre," MT."); ?> <br>
+        <?php if($gramaj!=0)  echo nf($gramaj," GR."); ?> <br>
+        <?php if($adet!=0)  echo nf($adet," AD."); ?> <br>
+        </th>
         </tr>
     </tfoot>
 

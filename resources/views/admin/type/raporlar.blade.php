@@ -97,6 +97,9 @@ $user = u();
                $alt_toplam = 0;
                $sevk_toplam = 0;
                $kalan_toplam = 0;
+               $alt_toplam_metre = 0;
+               $sevk_toplam_metre = 0;
+               $kalan_toplam_metre = 0;
                 ?>
                     {{bilgi("Yapmış olduğunuz filtreye göre $toplam sipariş döndürüldü")}}
                     <div class="float-right">
@@ -121,7 +124,7 @@ $user = u();
                             <?php foreach($sorgu AS $s) { 
                                 $alt_toplam += $s->qty;
                                 
-                                $firma = $musteriler[$s->kid];
+                                $firma = @$musteriler[$s->kid];
                                 $urun = $urunler[$s->type];
                                 $j = j($s->json);
                                 $user = $s->id;
@@ -137,18 +140,21 @@ $user = u();
                                 }
                                 if(isset($stok_metre_sayim[$s->id])) {
                                     $metre_sayim = $stok_metre_sayim[$s->id];
+                                    $alt_toplam_metre += $metre_sayim;
                                 }
                                 $kalan_metre = 0;
                                 if(isset($j['METRE'])) {
                                     $kalan_metre = $metre_sayim - $j['METRE']; 
+                                    $sevk_toplam_metre += $metre_sayim;
                                 }
                                 $sevk_toplam += $sayim;
                                 $kalan_toplam += ($s->qty - $sayim);
+                               
                               ?>
                              <tr class="<?php if($s->qty - $sayim<0) echo "table-danger"; ?>">
                                  <td>{{$s->id}}</td>
                                  <td>{{date("d.m.Y H:i",strtotime($s->created_at))}}</td>
-                                 <td>{{$firma->title}} / {{$firma->title2}}</td>
+                                 <td>{{@$firma->title}} / {{@$firma->title2}}</td>
                                  <td>{{$urun->title}}</td>
                                  <td>
                                  <?php urun_ozellikleri($j); ?>
@@ -181,9 +187,9 @@ $user = u();
                                         <th></th>
                                         <th></th>
                                         <th></th>
-                                        <th>{{nf($alt_toplam)}}</th>
-                                        <th>{{nf($sevk_toplam)}}</th>
-                                        <th>{{nf($kalan_toplam)}}</th>
+                                        <th>{{nf($alt_toplam)}} <br> {{nf($alt_toplam_metre, " MT.")}}</th>
+                                        <th>{{nf($sevk_toplam)}} <br> {{nf($sevk_toplam_metre, " MT.")}}</th>
+                                        <th>{{nf($kalan_toplam)}} <br> {{nf($alt_toplam_metre - $sevk_toplam_metre, " MT.")}}</th>
                                         <th></th>
                                         <th></th>
                                     </tr>

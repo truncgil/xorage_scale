@@ -1,4 +1,5 @@
 <?php 
+
 $firmalar = contents_to_array("Müşteriler");
 $urunler = contents_to_array("Ürünler");
 $stok_cikis_sayim = stok_cikis_sayim();
@@ -6,6 +7,20 @@ $stok_metre_sayim = stok_metre_sayim();
  ?>
 <div class="content">
     <div class="row">
+        <?php 
+        if(getisset("cogalt")) {
+            $s = db("siparisler")->where("id",get("cogalt"))->first();
+            if($s) {
+                $s = (Array) $s;
+                $id = $s['id'];
+                unset($s['id']);
+                unset($s['created_at']);
+                unset($s['uid']);
+                $id2 = ekle($s,"siparisler");
+                bilgi("$id Sipariş kodlu sipariş çoğaltılmıştır. Çoğaltılan yeni sipariş kodu: $id2");
+            }
+        }
+        ?>
         
         @include("admin.type.siparisler.yeni-siparis-formu")
 
@@ -181,6 +196,7 @@ $(function(){
                                      <div class="dropdown-menu">
                                          <a href="{{url("admin/types/stok-cikislari?ids=".$a->id)}}" class="btn btn-primary  dropdown-item"><i class="fa fa-cubes"></i> {{e2("Stok Çıkışı")}}</a>
                                          
+                                         <a href="?cogalt={{$a->id}}"  class="btn btn-success dropdown-item" title=""><i class="fa fa-copy"></i> {{e2("Çoğalt")}}</a>
                                          <a href="?ajax=print-siparis2&id={{$a->id}}&siparis-emri" target="_blank" class="btn btn-success dropdown-item" title=""><i class="fa fa-print"></i> {{e2("Sipariş Emri Yazdır")}}</a>
                                          <a href="?ajax=print-siparis2&id={{$a->id}}" target="_blank" class="btn btn-success dropdown-item" title=""><i class="fa fa-print"></i> {{e2("Tüm Zamanların Stok Çıkışlarını Yazdır")}}</a>
                                          <a href="?ajax=print-siparis2&id={{$a->id}}&bugun" target="_blank" class="btn btn-success dropdown-item" title=""><i class="fa fa-print"></i> {{e2("Bugünkü Stok Çıkışlarını Yazdır")}}</a>

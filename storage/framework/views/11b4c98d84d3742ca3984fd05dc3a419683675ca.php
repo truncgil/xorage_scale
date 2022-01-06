@@ -46,6 +46,7 @@ foreach($dizi AS $deger) {
                </td>
                <td>
                     <?php echo e(e2("SİPARİŞ BİLGİSİ")); ?>: <br>
+                 
                     <?php echo e(urun_ozellikleri($siparis_ozellikleri)); ?>
 
                </td>

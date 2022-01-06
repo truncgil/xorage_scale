@@ -45,6 +45,7 @@ foreach($dizi AS $deger) {
                </td>
                <td>
                     {{e2("SİPARİŞ BİLGİSİ")}}: <br>
+                 
                     {{urun_ozellikleri($siparis_ozellikleri)}}
                </td>
                <td>{{e2("MİKTAR")}}

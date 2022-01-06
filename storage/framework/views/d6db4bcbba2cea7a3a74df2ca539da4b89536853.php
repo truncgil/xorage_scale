@@ -15,6 +15,8 @@ unset($json['METRE']);
             $stok_json = j($s->json);
             unset($stok_json['qty']);
             unset($stok_json['ROLL_NO']);
+         //   unset($stok_json['GRAMAJ']);
+            unset($stok_json['ADET']);
             //print2($stok_json);
             $kabul = true;
             foreach($stok_json AS $alan => $deger) {

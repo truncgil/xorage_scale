@@ -1,4 +1,5 @@
 <?php 
+
 $firmalar = contents_to_array("Müşteriler");
 $urunler = contents_to_array("Ürünler");
 $stok_cikis_sayim = stok_cikis_sayim();
@@ -6,6 +7,20 @@ $stok_metre_sayim = stok_metre_sayim();
  ?>
 <div class="content">
     <div class="row">
+        <?php 
+        if(getisset("cogalt")) {
+            $s = db("siparisler")->where("id",get("cogalt"))->first();
+            if($s) {
+                $s = (Array) $s;
+                $id = $s['id'];
+                unset($s['id']);
+                unset($s['created_at']);
+                unset($s['uid']);
+                $id2 = ekle($s,"siparisler");
+                bilgi("$id Sipariş kodlu sipariş çoğaltılmıştır. Çoğaltılan yeni sipariş kodu: $id2");
+            }
+        }
+        ?>
         
         <?php echo $__env->make("admin.type.siparisler.yeni-siparis-formu", \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
@@ -187,6 +202,7 @@ $(function(){
                                      <div class="dropdown-menu">
                                          <a href="<?php echo e(url("admin/types/stok-cikislari?ids=".$a->id)); ?>" class="btn btn-primary  dropdown-item"><i class="fa fa-cubes"></i> <?php echo e(e2("Stok Çıkışı")); ?></a>
                                          
+                                         <a href="?cogalt=<?php echo e($a->id); ?>"  class="btn btn-success dropdown-item" title=""><i class="fa fa-copy"></i> <?php echo e(e2("Çoğalt")); ?></a>
                                          <a href="?ajax=print-siparis2&id=<?php echo e($a->id); ?>&siparis-emri" target="_blank" class="btn btn-success dropdown-item" title=""><i class="fa fa-print"></i> <?php echo e(e2("Sipariş Emri Yazdır")); ?></a>
                                          <a href="?ajax=print-siparis2&id=<?php echo e($a->id); ?>" target="_blank" class="btn btn-success dropdown-item" title=""><i class="fa fa-print"></i> <?php echo e(e2("Tüm Zamanların Stok Çıkışlarını Yazdır")); ?></a>
                                          <a href="?ajax=print-siparis2&id=<?php echo e($a->id); ?>&bugun" target="_blank" class="btn btn-success dropdown-item" title=""><i class="fa fa-print"></i> <?php echo e(e2("Bugünkü Stok Çıkışlarını Yazdır")); ?></a>
