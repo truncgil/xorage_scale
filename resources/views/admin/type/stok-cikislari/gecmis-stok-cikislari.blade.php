@@ -3,7 +3,8 @@
     <?php $stoklar = db("stok_cikislari");
     if(!getesit("urun","")) $stoklar = $stoklar->where("siparis->type",get("urun"));
     if(!getesit("musteri","")) $stoklar = $stoklar->where("musteri_id",get("musteri"));
-    if(!getesit("date1","")) $stoklar = $stoklar->where("created_at",get("date1"));
+    if(!getesit("date1","")) $stoklar = $stoklar->whereDate("created_at",">=",get("date1"));
+    if(!getesit("date2","")) $stoklar = $stoklar->whereDate("created_at","<=",get("date2"));
     $stoklar = $stoklar->orderBy("id","desc")->get(); ?>
     <div class="table-responsive ">
         <table class="table" id="excel">

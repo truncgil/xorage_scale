@@ -75,7 +75,7 @@ $stok_metre_sayim = stok_metre_sayim();
                             <a href="?" class="btn btn-<?php if(!getisset("durum")) echo "success"; else echo "default"; ?>">{{e2("Tümü")}}</a>
                         <?php foreach($siparis_durumlari AS $sd) {
                              ?>
-                             <a href="?durum={{$sd}}" class="btn btn-<?php if(getesit("durum",$sd)) echo "success"; else echo "default"; ?>">{{$sd}}</a>
+                             <a href="?durum={{$sd}}<?php if(getisset("q")) echo "&q={$_GET['q']}"; ?>" class="btn btn-<?php if(getesit("durum",$sd)) echo "success"; else echo "default"; ?>">{{$sd}}</a>
                              <?php 
                         } ?>
                     </div>
