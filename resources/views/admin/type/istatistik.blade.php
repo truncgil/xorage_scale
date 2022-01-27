@@ -47,12 +47,15 @@
                         <td>{{e2("TERMİN TARİHİ")}}</td>
                     </tr>
                     <?php foreach($siparisler AS $s)  { 
-                        $firma = $firmalar[$s->kid];
-                      ?>
-                     <tr>
-                         <td>{{$firma->title}} / {{$firma->title2}}</td>
-                         <td>{{date("d.m.Y",strtotime($s->date))}}</td>
-                     </tr> 
+                        if(isset($firmalar[$s->kid]))  { 
+                         
+                         $firma = $firmalar[$s->kid];
+                       ?>
+                      <tr>
+                          <td>{{$firma->title}} / {{$firma->title2}}</td>
+                          <td>{{date("d.m.Y",strtotime($s->date))}}</td>
+                      </tr>  
+                         <?php } ?>
                      <?php } ?>
                 </table>
         {{_col()}}
@@ -74,12 +77,15 @@
                         <td>{{e2("TERMİN TARİHİ")}}</td>
                     </tr>
                     <?php foreach($siparisler AS $s)  { 
-                        $firma = $firmalar[$s->kid];
-                      ?>
-                     <tr>
-                         <td>{{$firma->title}} / {{$firma->title2}}</td>
-                         <td>{{date("d.m.Y",strtotime($s->date))}}</td>
-                     </tr> 
+                        if(isset($firmalar[$s->id]))  { 
+                         
+                         $firma = $firmalar[$s->kid];
+                       ?>
+                      <tr>
+                          <td>{{$firma->title}} / {{$firma->title2}}</td>
+                          <td>{{date("d.m.Y",strtotime($s->date))}}</td>
+                      </tr>  
+                         <?php } ?>
                      <?php } ?>
                 </table>
         {{_col()}}

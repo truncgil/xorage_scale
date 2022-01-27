@@ -101,15 +101,27 @@ $users = usersArray();
     <?php echo e(col("col-md-12","Filtrele")); ?>
 
        <form action="" method="get" class="filtre">
-            <?php echo e(e2("ÜRÜN:")); ?>
+            <div class="row">
+                <div class="col-md">
+                    <?php echo e(e2("ÜRÜN:")); ?>
 
-            <select name="type" class="form-control select2 urun-sec2" id="">
-                    <option value=""><?php echo e(e2("Tümü")); ?></option>
-                <?php foreach($urunler AS $u) { ?>
-                    <option value="<?php echo e($u->id); ?>"><?php echo e($u->title); ?></option>
-                <?php } ?>
-            </select>
-            <div class="alt-detay2"></div>
+                    <select name="type" class="form-control select2 urun-sec2" id="">
+                            <option value=""><?php echo e(e2("Tümü")); ?></option>
+                        <?php foreach($urunler AS $u) { ?>
+                            <option value="<?php echo e($u->id); ?>"><?php echo e($u->title); ?></option>
+                        <?php } ?>
+                    </select>
+                    <div class="alt-detay2"></div>
+                </div>
+                <div class="col-md">
+                    <?php echo e(e2("İŞLEM TARİHİ")); ?>
+
+                    <div class="input-group">
+                        <input type="date" name="date1" id="date1" class="form-control">
+                        <input type="date" name="date2" id="date2" class="form-control">
+                    </div>
+                </div>
+            </div>
            
             <br>
             <div class="row">
@@ -236,6 +248,15 @@ $users = usersArray();
             $stoklar = $stoklar->whereNull("cikis");
         }
         
+        if(!getesit("date1","")) {
+            echo "ok";
+            $stoklar = $stoklar->whereDate("created_at",">=",get("date1"));
+        }
+        if(!getesit("date2","")) {
+            echo "ok";
+            $stoklar = $stoklar->whereDate("created_at","<=",get("date2"));
+        }
+        
         unset($get['filtre']);
         unset($get['type']);
         unset($get['satir']);
@@ -243,6 +264,9 @@ $users = usersArray();
         unset($get['durum']);
         unset($get['by']);
         unset($get['order']);
+        unset($get['date1']);
+        unset($get['date2']);
+        print2($get);
         $stoklar = $stoklar->where(function($query) use($get){
             foreach($get AS $alan => $deger) {
                 if($deger !="") {
